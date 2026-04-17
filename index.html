@@ -85,18 +85,20 @@ let data = [];
 fetch(url)
 .then(r => r.text())
 .then(text => {
-  const rows = text.split("\n").slice(1);
-  data = rows.map(r => {
-    const c = r.split(",");
+  const rows = text.trim().split("\n");
+  
+  data = rows.slice(1).map(row => {
+    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // CSV inteligente
+
     return {
-      nome: c[0],
-      chip: c[1],
-      ram: c[2],
-      ssd: c[3],
-      preco: c[4],
-      cor: c[5]
+      nome: (cols[0] || "").trim(),
+      chip: (cols[1] || "").trim(),
+      ram: (cols[2] || "").trim(),
+      ssd: (cols[3] || "").trim(),
+      preco: (cols[4] || "").trim(),
+      cor: (cols[5] || "").trim()
     };
-  });
+  }).filter(d => d.nome); // remove linhas vazias
 
   populate();
   render();
@@ -116,7 +118,7 @@ function fill(id, arr) {
   const el = document.getElementById(id);
   el.innerHTML = '<option value="">Todos</option>';
   arr.forEach(v => {
-    el.innerHTML += `<option>${v}</option>`;
+    el.innerHTML += `<option value="${v}">${v}</option>`;
   });
 }
 
@@ -128,16 +130,21 @@ function render() {
   const ssd = document.getElementById("ssd").value;
 
   const filtered = data.filter(d =>
-    (!chip || d.chip == chip) &&
-    (!ram || d.ram == ram) &&
-    (!ssd || d.ssd == ssd) &&
+    (!chip || d.chip === chip) &&
+    (!ram || d.ram === ram) &&
+    (!ssd || d.ssd === ssd) &&
     JSON.stringify(d).toLowerCase().includes(search)
   );
 
+  if (!filtered.length) {
+    grid.innerHTML = "<p>Nenhum produto encontrado.</p>";
+    return;
+  }
+
   grid.innerHTML = filtered.map(d => `
     <div class="card">
-      <div>${d.nome}</div>
-      <div>${d.ram} · ${d.ssd}</div>
+      <div><strong>${d.nome}</strong></div>
+      <div>${d.chip} · ${d.ram} · ${d.ssd}</div>
       <div class="price">R$ ${d.preco}</div>
     </div>
   `).join("");
