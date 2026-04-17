@@ -8,49 +8,60 @@
 <style>
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  background: #f5f5f7;
+  background: linear-gradient(180deg, #f5f5f7, #e9ecf1);
   margin: 0;
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
-  padding: 20px;
+  padding: 24px;
 }
 
 h1 {
-  font-size: 28px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .filters {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   margin: 20px 0;
 }
 
 select, input {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: white;
+  font-size: 14px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .card {
-  background: white;
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
 }
 
 .price {
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 10px;
+  font-size: 16px;
 }
 
 .dot {
@@ -78,27 +89,27 @@ select, input {
 </div>
 
 <script>
-const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-AC-76sH_l0muf9O1fpbtS1Rz0Nkf_8WWIxz-PUdwHIkXZ-kgioBZgBewuiGekPfswiokYLUIfYRm/pub?output=csv";
+const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTOiFkeQwYW0SG5gt5IGirEXmVfCB_SyLbUfxJFWJeO6Jf_FmN-Cs4V0xeaiUegBP4f3-IFLfMJE0_/pub?output=csv";
 
 let data = [];
 
 fetch(url)
 .then(r => r.text())
 .then(text => {
-  const rows = text.trim().split("\n");
-  
-  data = rows.slice(1).map(row => {
-    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // CSV inteligente
+  const rows = text.trim().split("\n").slice(1);
+
+  data = rows.map(r => {
+    const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
     return {
-      nome: (cols[0] || "").trim(),
-      chip: (cols[1] || "").trim(),
-      ram: (cols[2] || "").trim(),
-      ssd: (cols[3] || "").trim(),
-      preco: (cols[4] || "").trim(),
-      cor: (cols[5] || "").trim()
+      nome: c[0]?.replace(/"/g, ""),
+      chip: c[1]?.replace(/"/g, ""),
+      ram: c[2]?.replace(/"/g, ""),
+      ssd: c[3]?.replace(/"/g, ""),
+      preco: Number(c[4]?.replace(/"/g, "")),
+      cor: c[5]?.replace(/"/g, "")
     };
-  }).filter(d => d.nome); // remove linhas vazias
+  });
 
   populate();
   render();
@@ -130,22 +141,17 @@ function render() {
   const ssd = document.getElementById("ssd").value;
 
   const filtered = data.filter(d =>
-    (!chip || d.chip === chip) &&
-    (!ram || d.ram === ram) &&
-    (!ssd || d.ssd === ssd) &&
+    (!chip || d.chip == chip) &&
+    (!ram || d.ram == ram) &&
+    (!ssd || d.ssd == ssd) &&
     JSON.stringify(d).toLowerCase().includes(search)
   );
-
-  if (!filtered.length) {
-    grid.innerHTML = "<p>Nenhum produto encontrado.</p>";
-    return;
-  }
 
   grid.innerHTML = filtered.map(d => `
     <div class="card">
       <div><strong>${d.nome}</strong></div>
-      <div>${d.chip} · ${d.ram} · ${d.ssd}</div>
-      <div class="price">R$ ${d.preco}</div>
+      <div>${d.chip} · ${d.ram}GB · ${d.ssd}GB</div>
+      <div class="price">R$ ${d.preco.toLocaleString('pt-BR')}</div>
     </div>
   `).join("");
 }
