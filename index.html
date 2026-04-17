@@ -1,538 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo de Produtos</title>
-  <style>
-    :root {
-      --bg: #f5f5f7;
-      --card: rgba(255,255,255,0.78);
-      --border: rgba(0,0,0,0.08);
-      --text: #111111;
-      --muted: #6b7280;
-      --accent: #111111;
-      --accent-soft: rgba(17,17,17,0.06);
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
-      --radius: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo Apple Style</title>
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 30%),
-        linear-gradient(180deg, #f8f8fb, #eef1f5);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 18px;
-    }
-
-    .container {
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      background: var(--card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
-
-    .topbar {
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-      align-items: start;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-      max-width: 760px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .search-wrap {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .search-bar, .filtro-select {
-      width: 100%;
-      padding: 13px 14px;
-      font-size: 14px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.92);
-      color: var(--text);
-      font-family: inherit;
-      outline: none;
-      transition: 0.2s ease;
-      box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset;
-    }
-
-    .search-bar:focus, .filtro-select:focus {
-      border-color: rgba(17,17,17,0.24);
-      transform: translateY(-1px);
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-      align-items: center;
-    }
-
-    .btn {
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
-      border-radius: 14px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
-    .btn.primary {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
-
-    .count-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 14px 2px 12px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .results {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      background: var(--card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .card.best {
-      border-color: rgba(17,17,17,0.22);
-      box-shadow: 0 16px 36px rgba(0,0,0,0.12);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .title-block {
-      min-width: 0;
-    }
-
-    .item-name {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 5px;
-      line-height: 1.25;
-    }
-
-    .item-specs {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .price-box {
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .item-price {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-    }
-
-    .price-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      font-size: 11px;
-      font-weight: 700;
-      color: #202020;
-    }
-
-    .colors-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .color-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      color: var(--text);
-    }
-
-    .cor-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.12);
-      flex-shrink: 0;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 42px 16px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.7);
-      border: 1px dashed rgba(0,0,0,0.12);
-      border-radius: 22px;
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      color: #8a8f99;
-      margin-top: 18px;
-      padding-bottom: 4px;
-    }
-
-    @media (max-width: 980px) {
-      .results { grid-template-columns: 1fr; }
-      .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .search-wrap { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .hero { padding: 14px; border-radius: 22px; }
-      .filters { grid-template-columns: 1fr; }
-      .card-top { flex-direction: column; }
-      .price-box { text-align: left; }
-      .item-price { font-size: 17px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="hero">
-      <div class="topbar">
-        <div>
-          <h1>🍎 Catálogo de Produtos</h1>
-          <div class="subtitle">
-            Catálogo com busca inteligente, filtros por linha, chip, tela, memória e SSD, além de botão para copiar a descrição no WhatsApp.
-          </div>
-        </div>
-        <div class="pill" id="summary-pill">Atualizado em Abril/2026</div>
-      </div>
-
-      <div class="search-wrap">
-        <input class="search-bar" type="text" id="search" placeholder="Buscar modelo, chip, memória, cor, tela, SSD, preço..." />
-        <button class="btn primary" id="btn-clear">Limpar filtros</button>
-      </div>
-
-      <div class="filters">
-        <select class="filtro-select" id="f-linha"><option value="">Todas as linhas</option></select>
-        <select class="filtro-select" id="f-chip"><option value="">Todos os chips</option></select>
-        <select class="filtro-select" id="f-tela"><option value="">Todos os tamanhos</option></select>
-        <select class="filtro-select" id="f-ram"><option value="">Toda memória</option></select>
-        <select class="filtro-select" id="f-ssd"><option value="">Todo armazenamento</option></select>
-      </div>
-
-      <div class="toolbar">
-        <button class="btn" id="btn-best">Mostrar só melhores custos-benefícios</button>
-        <button class="btn" id="btn-all">Mostrar todos</button>
-      </div>
-    </div>
-
-    <div class="count-row">
-      <div id="count"></div>
-      <div id="bestHint"></div>
-    </div>
-
-    <div class="results" id="results"></div>
-
-    <div class="footer">Use este arquivo no Vercel como página principal. Você pode atualizar a lista editando o bloco de produtos.</div>
-  </div>
-
-  <script>
-let produtos = [];
-
-async function carregarProdutos() {
-  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-AC-76sH_l0muf9O1fpbtS1Rz0Nkf_8WWIxz-PUdwHIkXZ-kgioBZgBewuiGekPfswiokYLUIfYRm/pub?output=csv";
-
-  const res = await fetch(url);
-  const text = await res.text();
-
-  const linhas = text.split("\n").slice(1);
-
-  produtos = linhas
-    .map(l => l.split(","))
-    .filter(l => l.length >= 8)
-    .map(([nome, linha, chip, ram, ssd, tela, cor, preco]) => ({
-      nome: nome.trim(),
-      linha: linha.trim(),
-      chip: chip.trim(),
-      ram: Number(ram),
-      ssd: Number(ssd),
-      tela: Number(tela),
-      cor: cor.trim(),
-      preco: Number(preco),
-      colors: [cor.trim()]
-    }));
-
-  carregarProdutos();
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: #f5f5f7;
+  margin: 0;
 }
 
-    const colorMap = {
-      'Silver': '#C0C0C0',
-      'Space Black': '#1a1a1a',
-      'Midnight': '#1c2b3a',
-      'Starlight': '#E8DFD0',
-      'Sky Blue': '#87CEEB',
-      'Sky': '#87CEEB',
-      'Blue': '#4A90D9',
-      'Green': '#4CAF50',
-      'Rosa': '#F4A7B9',
-      'Space Gray': '#8E8E93',
-      'Preto': '#1a1a1a',
-      'Azul': '#4A90D9'
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+select, input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.price {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>🍎 Catálogo</h1>
+
+<div class="filters">
+  <input id="search" placeholder="Buscar...">
+  <select id="chip"></select>
+  <select id="ram"></select>
+  <select id="ssd"></select>
+</div>
+
+<div id="grid" class="grid"></div>
+</div>
+
+<script>
+const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-AC-76sH_l0muf9O1fpbtS1Rz0Nkf_8WWIxz-PUdwHIkXZ-kgioBZgBewuiGekPfswiokYLUIfYRm/pub?output=csv";
+
+let data = [];
+
+fetch(url)
+.then(r => r.text())
+.then(text => {
+  const rows = text.split("\n").slice(1);
+  data = rows.map(r => {
+    const c = r.split(",");
+    return {
+      nome: c[0],
+      chip: c[1],
+      ram: c[2],
+      ssd: c[3],
+      preco: c[4],
+      cor: c[5]
     };
+  });
 
-    const money = new Intl.NumberFormat('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+  populate();
+  render();
+});
 
-    const fmtMoney = (value) => money.format(value);
-    const ssdLabel = (value) => value >= 1000 ? `${value / 1000}TB` : `${value}GB`;
-    const uniq = (arr) => [...new Set(arr)].sort((a, b) => typeof a === 'number' ? a - b : String(a).localeCompare(String(b), 'pt-BR'));
-    const formatTela = (value) => `${value}"`;
+function populate() {
+  const chips = [...new Set(data.map(d => d.chip))];
+  const ram = [...new Set(data.map(d => d.ram))];
+  const ssd = [...new Set(data.map(d => d.ssd))];
 
-    function populateSelects() {
-      const selects = [
-        ['f-linha', uniq(produtos.map(p => p.linha)), (v) => v],
-        ['f-chip', uniq(produtos.map(p => p.chip)), (v) => v],
-        ['f-tela', uniq(produtos.map(p => p.tela)), (v) => formatTela(v)],
-        ['f-ram', uniq(produtos.map(p => p.ram)), (v) => `${v}GB`],
-        ['f-ssd', uniq(produtos.map(p => p.ssd)), (v) => ssdLabel(v)]
-      ];
+  fill("chip", chips);
+  fill("ram", ram);
+  fill("ssd", ssd);
+}
 
-      selects.forEach(([id, values, label]) => {
-        const select = document.getElementById(id);
-        values.forEach((value) => {
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = label(value);
-          select.appendChild(option);
-        });
-      });
-    }
+function fill(id, arr) {
+  const el = document.getElementById(id);
+  el.innerHTML = '<option value="">Todos</option>';
+  arr.forEach(v => {
+    el.innerHTML += `<option>${v}</option>`;
+  });
+}
 
-    function getFilteredProducts() {
-      const busca = document.getElementById('search').value.trim().toLowerCase();
-      const fLinha = document.getElementById('f-linha').value;
-      const fChip = document.getElementById('f-chip').value;
-      const fTela = document.getElementById('f-tela').value;
-      const fRam = document.getElementById('f-ram').value;
-      const fSsd = document.getElementById('f-ssd').value;
-      const bestOnly = state.bestOnly;
+function render() {
+  const grid = document.getElementById("grid");
+  const search = document.getElementById("search").value.toLowerCase();
+  const chip = document.getElementById("chip").value;
+  const ram = document.getElementById("ram").value;
+  const ssd = document.getElementById("ssd").value;
 
-      return produtos.filter((p) => {
-        if (fLinha && p.linha !== fLinha) return false;
-        if (fChip && p.chip !== fChip) return false;
-        if (fTela && p.tela !== Number(fTela)) return false;
-        if (fRam && p.ram !== Number(fRam)) return false;
-        if (fSsd && p.ssd !== Number(fSsd)) return false;
+  const filtered = data.filter(d =>
+    (!chip || d.chip == chip) &&
+    (!ram || d.ram == ram) &&
+    (!ssd || d.ssd == ssd) &&
+    JSON.stringify(d).toLowerCase().includes(search)
+  );
 
-        if (bestOnly) {
-          const sameKey = produtos.filter(x => x.linha === p.linha && x.chip === p.chip && x.ram === p.ram && x.ssd === p.ssd && x.tela === p.tela);
-          const minPrice = Math.min(...sameKey.map(x => x.preco));
-          if (p.preco !== minPrice) return false;
-        }
+  grid.innerHTML = filtered.map(d => `
+    <div class="card">
+      <div>${d.nome}</div>
+      <div>${d.ram} · ${d.ssd}</div>
+      <div class="price">R$ ${d.preco}</div>
+    </div>
+  `).join("");
+}
 
-        if (busca) {
-          const hay = [
-            p.nome,
-            p.linha,
-            p.chip,
-            p.cor,
-            `${p.ram}GB`,
-            ssdLabel(p.ssd),
-            `${p.tela}"`,
-            `R$ ${fmtMoney(p.preco)}`
-          ].join(' ').toLowerCase();
-          if (!hay.includes(busca)) return false;
-        }
+['search','chip','ram','ssd'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+});
+</script>
 
-        return true;
-      }).sort((a, b) => a.preco - b.preco);
-    }
-
-    function bestBadge(product, filtered) {
-      const group = filtered.filter(x => x.linha === product.linha && x.chip === product.chip && x.ram === product.ram && x.ssd === product.ssd && x.tela === product.tela);
-      const minPrice = Math.min(...group.map(x => x.preco));
-      return product.preco === minPrice ? 'Melhor preço do grupo' : '';
-    }
-
-    function copyWhatsAppText(product) {
-      const text = `${product.nome} | ${product.chip} | ${product.ram}GB RAM | ${ssdLabel(product.ssd)} SSD | ${formatTela(product.tela)} | Cor: ${product.cor} | R$ ${fmtMoney(product.preco)}`;
-      navigator.clipboard.writeText(text);
-      alert('Descrição copiada para o WhatsApp.');
-    }
-
-    function render() {
-      const filtered = getFilteredProducts();
-      const results = document.getElementById('results');
-      const count = document.getElementById('count');
-      const bestHint = document.getElementById('bestHint');
-      const summary = document.getElementById('summary-pill');
-
-      count.textContent = `${filtered.length} produto${filtered.length === 1 ? '' : 's'} encontrado${filtered.length === 1 ? '' : 's'}`;
-      bestHint.textContent = state.bestOnly ? 'Exibindo apenas os melhores preços por configuração' : 'Exibindo todos os itens disponíveis';
-      summary.textContent = `${produtos.length} ofertas cadastradas`;
-
-      if (!filtered.length) {
-        results.innerHTML = `<div class="empty">Nenhum produto encontrado com esses filtros.</div>`;
-        return;
-      }
-
-      results.innerHTML = filtered.map((p) => {
-        const badge = bestBadge(p, filtered);
-        return `
-          <div class="card ${badge ? 'best' : ''}">
-            <div class="card-top">
-              <div class="title-block">
-                <div class="item-name">${p.nome}</div>
-                <div class="item-specs">${p.linha} · ${p.chip} · ${p.ram}GB RAM · ${ssdLabel(p.ssd)} · ${formatTela(p.tela)}</div>
-              </div>
-              <div class="price-box">
-                <div class="item-price">R$ ${fmtMoney(p.preco)}</div>
-                ${badge ? `<div class="price-tag">⭐ ${badge}</div>` : ''}
-              </div>
-            </div>
-
-            <div class="colors-wrap">
-              ${(p.colors || [p.cor]).map((c) => `
-                <div class="color-chip">
-                  <span class="cor-dot" style="background:${colorMap[c] || '#999'}"></span>
-                  <span>${c}</span>
-                </div>
-              `).join('')}
-            </div>
-
-            <div class="card-actions">
-              <button class="btn primary" onclick='copyWhatsAppText(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Copiar para WhatsApp</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    const state = { bestOnly: false };
-
-    carregarProdutos();
-
-    document.getElementById('search').addEventListener('input', render);
-    ['f-linha','f-chip','f-tela','f-ram','f-ssd'].forEach(id => {
-      document.getElementById(id).addEventListener('change', render);
-    });
-
-    document.getElementById('btn-clear').addEventListener('click', () => {
-      document.getElementById('search').value = '';
-      ['f-linha','f-chip','f-tela','f-ram','f-ssd'].forEach(id => document.getElementById(id).value = '');
-      state.bestOnly = false;
-      document.getElementById('btn-best').textContent = 'Mostrar só melhores custos-benefícios';
-      render();
-    });
-
-    document.getElementById('btn-best').addEventListener('click', () => {
-      state.bestOnly = !state.bestOnly;
-      document.getElementById('btn-best').textContent = state.bestOnly ? 'Mostrando só melhores custos-benefícios' : 'Mostrar só melhores custos-benefícios';
-      render();
-    });
-
-    document.getElementById('btn-all').addEventListener('click', () => {
-      state.bestOnly = false;
-      document.getElementById('btn-best').textContent = 'Mostrar só melhores custos-benefícios';
-      render();
-    });
-
-    window.copyWhatsAppText = copyWhatsAppText;
-  </script>
 </body>
 </html>
